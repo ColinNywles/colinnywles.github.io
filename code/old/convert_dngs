@@ -1,0 +1,111 @@
+#!/bin/bash
+
+# set dir here
+parent_path="/Volumes/PhotoSSD/TempEdits/ImportDigital/"
+
+# get user input
+echo "Enter the file extention of the raw files, e.g. .CR2 or .ARW or .RAF"
+read file_ext 
+echo "  "
+echo "Select 'color' or 'bw'"
+read crlbw 
+echo "  "
+isbw="bw"
+nodetailsharp=".RAF"
+
+# create sub paths
+script_path=$parent_path"scripts/"
+assets_path=$parent_path"scripts/assets/"
+trash_path=$parent_path"trash/"
+
+# rename raw files with date and file number
+cd $parent_path
+c=1
+for i in $(ls *$file_ext); do
+    int=$RANDOM
+    printf -v c_name "%04d" $c
+    echo $i $c_name
+    mv $i "img_"$c_name"_"$(date +%Y%m%d)"_"$int$file_ext
+    let c=c+1
+    sleep 0.1
+done
+sleep 2
+
+# add path to applescript
+cd $parent_path
+sed 's|insert_path_here|set targetFolder to POSIX file "'"$parent_path"'"|g' $assets_path"ApplyAutoSettings.SCPT" > $assets_path"ApplyAutoSettings_temp.SCPT"
+sed 's|insert_file_ext_here|"'"$file_ext"'"|g' $assets_path"ApplyAutoSettings_temp.SCPT" > $assets_path"ApplyAutoSettings_compiled.SCPT"
+rm -rf $assets_path"ApplyAutoSettings_temp.SCPT"
+
+# execute applescript, this applies the auto camera raw settings to the xmp files
+osascript  $assets_path"ApplyAutoSettings_compiled.SCPT"
+sleep 3;
+
+# apply preset (curve, vignette, crop etc)
+cd $parent_path
+echo "Applying preset and convert to DNG:"
+ls *$file_ext
+
+echo "------------------------------------------------------------"
+
+for i in $(ls *.xmp); do
+
+    echo ${i%%.*}
+
+    # set preset sharpness
+    sed -i.bak 's/crs:Sharpness=.*/crs:Sharpness="103"/g' $i 
+    sed -i.bak 's/crs:SharpenRadius=.*/crs:SharpenRadius="+1.2"/g' $i
+    sed -i.bak 's/crs:SharpenDetail=.*/crs:SharpenDetail="25"/g' $i
+    sed -i.bak 's/crs:SharpenEdgeMasking=.*/crs:SharpenEdgeMasking="71"/g' $i
+
+    # set preset vignette settings
+    sed -i.bak 's/crs:PostCropVignetteAmount=.*/crs:PostCropVignetteAmount="-11"/g' $i 
+    sed -i.bak 's/crs:PostCropVignetteMidpoint=.*/crs:PostCropVignetteMidpoint="50"/g' $i 
+    sed -i.bak 's/crs:PostCropVignetteFeather=.*/crs:PostCropVignetteFeather="58"/g' $i 
+    sed -i.bak 's/crs:PostCropVignetteRoundness=.*/crs:PostCropVignetteRoundness="0"/g' $i 
+    sed -i.bak 's/crs:PostCropVignetteStyle=.*/crs:PostCropVignetteStyle="1"/g' $i 
+    sed -i.bak 's/crs:OverrideLookVignette=.*/crs:OverrideLookVignette="True"/g' $i 
+
+    if [[ $crlbw = $isbw ]];then
+
+        # set to BW
+        sed -i.bak 's/crs:ConvertToGrayscale=.*/crs:ConvertToGrayscale="True"/g' $i 
+
+        # set curve
+        sed -i.bak 's/crs:ToneCurveName2012=.*/crs:ToneCurveName2012="Custom"/g' $i 
+        lineStart=$(grep -Fn -m 1  '<crs:ToneCurvePV2012>' $i | cut -d: -f 1)
+        lineEnd=$(grep -Fn -m 1  '</crs:ToneCurvePV2012>' $i | cut -d: -f 1)
+        echo $lineStart $lineEnd
+        for (( l=$lineStart; l<=$lineEnd; l++ )); do  sed -i.bak "${lineStart}d" $i; done
+        lineInsert=$(grep -Fn -m 1  '</xmpMM:History>' $i | cut -d: -f 1)
+        sed -i.bak "${lineInsert}r ${assets_path}curvepoints.xmp" $i
+    
+    fi
+
+    if [[ $nodetailsharp = $file_ext ]];then
+
+        # set sharpen for fujifilm raw files
+        sed -i.bak 's/crs:Sharpness=.*/crs:Sharpness="60"/g' $i 
+        sed -i.bak 's/crs:SharpenRadius=.*/crs:SharpenRadius="+1"/g' $i
+        sed -i.bak 's/crs:SharpenDetail=.*/crs:SharpenDetail="0"/g' $i
+        sed -i.bak 's/crs:SharpenEdgeMasking=.*/crs:SharpenEdgeMasking="70"/g' $i
+
+    fi
+
+done
+
+# export to dng
+cd $parent_path
+for i in $(ls *$file_ext); do
+    "/Applications/Adobe DNG Converter.app/Contents/MacOS/Adobe DNG Converter" -c $i
+done
+
+# move original raw files to trash
+cd $parent_path
+mkdir $trash_path
+mv *$file_ext $trash_path
+mv *.xmp $trash_path
+
+# delete temp files
+rm -rf *.bak
+

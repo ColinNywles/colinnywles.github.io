@@ -1,0 +1,56 @@
+# # add black film like border to images
+# cd $jpg_path
+# echo " "
+# echo "processing jpgs"
+# for i in $(ls *.jpg); do
+#     echo $i
+#     w=$(identify -format "%w" $i)
+#     h=$(identify -format "%h" $i)
+#     let wc=w-2
+#     let hc=h-2
+
+#     lb=$((1+RANDOM%(3-1))).$((RANDOM%999));
+#     sb=$((1+RANDOM%(3-1))).$((RANDOM%999));
+
+#     let lbf=lb/10+0.45
+#     let sbf=sb/10+0.31
+#     echo $lbf $sbf
+
+#     # adding borders, checking if image is landscape or portrait
+#     echo "adding black border"
+#     if [[ $w > $h ]];then
+#         convert $i -gravity Center -crop "$wc"x"$hc"+0+0 img_crop.jpg
+#         convert img_crop.jpg -fill gray50 -colorize 100 -bordercolor 'rgb(45,45,45)' -border $sbf%x$lbf% -blur 0x2 burn_edges.png
+#         convert burn_edges.png -bordercolor 'rgb(45,45,45)'  -border 1x1 burn_edges.png
+#         convert -bordercolor 'rgb(45,45,45)' -border $sbf%x$lbf% $i border_"$i"
+#         convert border_"$i" burn_edges.png -compose hardlight -composite border2_"$i"
+#     else
+#         convert $i -gravity Center -crop "$wc"x"$hc"+0+0 img_crop.jpg
+#         convert img_crop.jpg -fill gray50 -colorize 100 -bordercolor 'rgb(45,45,45)' -border $lbf%x$sbf% -blur 0x2 burn_edges.png
+#         convert burn_edges.png -bordercolor 'rgb(45),45,45)'  -border 1x1 burn_edges.png
+#         convert -bordercolor 'rgb(45,45,45)' -border $lbf%x$sbf% $i border_"$i"
+#         convert border_"$i" burn_edges.png -compose hardlight -composite border2_"$i"
+#     fi
+
+
+#     # rotating image 
+#     rotate_sample=$((1+RANDOM%(10-1))).$((RANDOM%999));
+#     if [[ $rotate_sample > 5 ]];then
+#         if [[ $rotate_sample > 8 ]];then
+#             echo "rotating image -0.18 degree"
+#             convert border2_"$i" -distort SRT -0.18 -gravity center border3_"$i"
+#         else
+#             echo "rotating image 0.27 degree"
+#             convert border2_"$i" -distort SRT 0.27 -gravity center border3_"$i"
+#         fi
+#     else
+#         echo "no rotation applied"
+#         cp border2_"$i" border3_"$i"
+#     fi
+
+#     rm -rf burn_edges.png img_crop.jpg border_"$i" border2_"$i" $i
+#     cp border3_"$i" $i
+#     rm -rf border3_"$i"
+#     sleep 0.05
+
+# done
