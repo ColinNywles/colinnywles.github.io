@@ -1,4 +1,4 @@
-set targetFolder to POSIX file "/Volumes/PhotoSSD/WEBSITE_CNywles/import_images/exports_2022_06_01_11_40/dng/"
+set targetFolder to POSIX file "/Volumes/PhotoSSD/WEBSITE_CNywles/import_images/exports_2022_06_01_18_51/tif/"
 -- set targetFolder to POSIX file "/Volumes/PhotoSSD/WEBSITE_Cloe/import"
 
 tell application "Finder"
