@@ -26,6 +26,7 @@
 
 	<!-- Pre-load logo fonts -->
 	<link rel="preload" href="assets/Getlost.otf" as="font" type="font/otf">
+	<link rel="preload" href="js/main.js" as="script">
 	
 	<!-- Image counter font -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -165,6 +166,7 @@
 			for( i = img_start; i < img_stop; i++){
 				filename = img_data[i].file.replace(/\.[^/.]+$/, "")
 				$(".img-responsive").eq(i).attr("src", img_folder + filename + img_ext)
+				$(".image-popup").eq(i).css("opacity",1)
 			}
 		}
 
@@ -176,7 +178,9 @@
 			for( i = img_start; i < img_stop; i++){
 				filename = img_data[i].file.replace(/\.[^/.]+$/, "")
 				$(".img-responsive").eq(i).attr("src", img_folder + filename + img_ext)
+				$(".image-popup").eq(i).css("opacity",1)
 			}
+
 		}
 
 
@@ -188,17 +192,6 @@
 			LoadIMGsNow(data,0,initial_load_n_imgs,".jpg","images/small/");
 		}
 		
-
-		// set size banner to full screen, works on mobile
-		// $("#landingHeader").css('height',$(window).innerHeight() + 'px');
-		$("#down").css("top",$(window).innerHeight()*0.85 + 'px');
-
-		// place arrow down at right location mobile
-		$("#down").mouseover(function() {
-			$(this).css("top",$(window).innerHeight()*0.87 + 'px');
-		}).mouseout(function() {
-			$(this).css("top",$(window).innerHeight()*0.85 + 'px');
-		});
 
 		window.onbeforeunload = function () {
 			window.scrollTo(0, 0);
@@ -240,8 +233,8 @@
 
 		// load thumbnails in batches
 		var b = 0;
-		LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,1); b++
 		LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,2); b++
+		LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,3); b++
 		
 		// LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,4); b++					
 		// LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,8); b++

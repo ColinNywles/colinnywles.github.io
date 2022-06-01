@@ -57,6 +57,15 @@
   #mainTitle{font-size: 140px;}
 }
 
+#image_a{
+  opacity: 0;
+}
+
+.image-popup{
+  transition:opacity 2s
+}
+
+
 html, body {
   overflow-x: hidden;
 }
