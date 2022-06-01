@@ -52,7 +52,7 @@ function addImages(obj,data,n,webp) {
 
             img_divs +=	'<div class="grid-item item animate-box" data-animate-effect="fadeIn">' +
                             '<a href="images/' + dir + "/" + file + extention + '" class="image-popup" title="' + descri + '">' +
-                                '<div class="img-wrap"><img src="images/placeholder/portrait_w.png" alt="" class="img-responsive" ></div>' +
+                                '<div class="img-wrap"><img src="images/placeholder/portrait_w2.png" alt="" class="img-responsive" ></div>' +
                                 '<div class="text-wrap"><div class="text-inner popup"><div><h2>' + descri + '</h2></div></div></div>' +
                             '</a>' +
                         '</div>';
@@ -61,7 +61,7 @@ function addImages(obj,data,n,webp) {
 
             img_divs +=	'<div class="grid-item item animate-box" data-animate-effect="fadeIn">' +
                             '<a href="images/' + dir + "/" + file + extention + '" class="image-popup" title="' + descri + '">' +
-                                '<div class="img-wrap"><img src="images/placeholder/landscape_w.png" alt="" class="img-responsive" ></div>' +
+                                '<div class="img-wrap"><img src="images/placeholder/landscape_w2.png" alt="" class="img-responsive" ></div>' +
                                 '<div class="text-wrap"><div class="text-inner popup"><div><h2>' + descri + '</h2></div></div></div>' +
                             '</a>' +
                         '</div>';
