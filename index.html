@@ -120,7 +120,7 @@
 			];
 
 		// shuffle data 
-		//shuffleArray(data);
+		shuffleArray(data);
 
 		// add remaining images
 		addImages(document.getElementById("add-images-here"),data,data.length,canUseWebP());
@@ -129,6 +129,8 @@
 
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
+
+
 	<!-- jQuery Easing -->
 	<script src="js/jquery.easing.1.3.js"></script>
 	<!-- Bootstrap -->
@@ -142,6 +144,7 @@
 	<script src="js/isotope.pkgd.min.js"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<!-- GSAP  -->
+	
 	<script src="js/TweenLite.min.js"></script>
 	<script src="js/CSSPlugin.min.js"></script>
 	<script src="js/EasePack.min.js"></script>
@@ -151,7 +154,9 @@
 	<!-- SCROLL DOWN -->
 	<script type="text/javascript">
 
-		var initial_load_n_imgs = 15;
+
+
+		var initial_load_n_imgs = 12;
 
 		function sleep(ms) {
 			return new Promise(resolve => setTimeout(resolve, ms));
@@ -193,52 +198,39 @@
 		}
 		
 
-		window.onbeforeunload = function () {
-			window.scrollTo(0, 0);
-		}
-		
-		$(document).ready( function () {
-			$('#down').on('click',function () {
-				$("html").scrollTop(0);
-				console.log("Clicked!");
-				$('html, body').animate({
-					scrollTop: $(".container-fluid").offset().top
-				}, 700);
-			});
-		});
 
-		$(window).resize(function(){
-			if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-				location.reload(); // reload on resize, desktop only
+		$(window).on('scroll resize', function() { }).one('scroll resize', function() {
+	
+			if (Math.abs(100 - $(this).scrollTop()) < 1000) {
+		
+				// image properties, check if browser doesn't support webp
+				var filename = "";
+				var file_ext = ".webp";
+				var folder = "images/small_webp/";
+				var webp = canUseWebP();
+				if(!webp) {
+					file_ext = ".jpg";
+					folder = "images/small/";
+				}
+
+				// loading batch settings
+				var n_load_batches = 3;		
+				var n_imgs_per_batch = Math.round( (data.length-initial_load_n_imgs) / n_load_batches);
+				let stops = [initial_load_n_imgs]; // image to start at
+				for( i = 1; i < (n_load_batches+1); i++) stops.push(initial_load_n_imgs + n_imgs_per_batch*i)
+				stops[stops.length-1] = data.length
+				
+
+				// load thumbnails in batches
+				var b = 0;
+				LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,0); b++
+				LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,1); b++		
+				LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,2); b++					
+				// LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,5); b++
+				// LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,6); b++
+
 			}
-		}); 
-		
-		// image properties, check if browser doesn't support webp
-		var filename = "";
-		var file_ext = ".webp";
-		var folder = "images/small_webp/";
-		var webp = canUseWebP();
-		if(!webp) {
-			file_ext = ".jpg";
-			folder = "images/small/";
-		}
-
-		// loading batch settings
-		var n_load_batches = 2;		
-		var n_imgs_per_batch = Math.round( (data.length-15) / n_load_batches);
-		let stops = [initial_load_n_imgs]; // image to start at
-		for( i = 1; i < (n_load_batches+1); i++) stops.push(initial_load_n_imgs + n_imgs_per_batch*i)
-		stops[stops.length-1] = data.length
-		
-
-		// load thumbnails in batches
-		var b = 0;
-		LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,2); b++
-		LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,3); b++
-		
-		// LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,4); b++					
-		// LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,8); b++
-		// LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,10); b++
+		});
 
 
 	</script>

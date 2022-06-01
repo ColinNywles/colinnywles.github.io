@@ -49,49 +49,26 @@ function addImages(obj,data,n,webp) {
 
 
         if(data[i].format=="portrait"){ // is portrait
-
-            if(i < 16){
-                // no animation
-                img_divs +=	'<div class="grid-item item" >' +
-                                '<a id="image_a" href="images/' + dir + "/" + file + extention + '" class="image-popup" title="' + descri + '">' +
-                                    '<div class="img-wrap"><img src="images/placeholder/portrait_w2.png" alt="" class="img-responsive" ></div>' +
-                                    '<div class="text-wrap"><div class="text-inner popup"><div><h2>' + descri + '</h2></div></div></div>' +
-                                '</a>' +
-                            '</div>';
-
-            }else{
-                img_divs +=	'<div class="grid-item item animate-box" data-animate-effect="fadeIn">' +
-                                '<a id="image_a" href="images/' + dir + "/" + file + extention + '" class="image-popup" title="' + descri + '">' +
-                                    '<div class="img-wrap"><img src="images/placeholder/portrait_w2.png" alt="" class="img-responsive" ></div>' +
-                                    '<div class="text-wrap"><div class="text-inner popup"><div><h2>' + descri + '</h2></div></div></div>' +
-                                '</a>' +
-                            '</div>';
-            }
-
-
-
+   
+            // no animation
+            img_divs +=	'<div class="grid-item item" >' +
+                            '<a id="image_a" href="images/' + dir + "/" + file + extention + '" class="image-popup" title="' + descri + '">' +
+                                '<div class="img-wrap"><img src="images/placeholder/portrait_w2.png" alt="" class="img-responsive" ></div>' +
+                                '<div class="text-wrap"><div class="text-inner popup"><div><h2>' + descri + '</h2></div></div></div>' +
+                            '</a>' +
+                        '</div>';
 
         }else{ // is landscape
+     
+            // no animation
+            img_divs +=	'<div class="grid-item item">' +
+                            '<a id="image_a" href="images/' + dir + "/" + file + extention + '" class="image-popup" title="' + descri + '">' +
+                                '<div class="img-wrap"><img src="images/placeholder/landscape_w2.png" alt="" class="img-responsive" ></div>' +
+                                '<div class="text-wrap"><div class="text-inner popup"><div><h2>' + descri + '</h2></div></div></div>' +
+                            '</a>' +
+                        '</div>';
 
-            if(i < 16){           
-                // no animation
-                img_divs +=	'<div class="grid-item item">' +
-                                '<a id="image_a" href="images/' + dir + "/" + file + extention + '" class="image-popup" title="' + descri + '">' +
-                                    '<div class="img-wrap"><img src="images/placeholder/landscape_w2.png" alt="" class="img-responsive" ></div>' +
-                                    '<div class="text-wrap"><div class="text-inner popup"><div><h2>' + descri + '</h2></div></div></div>' +
-                                '</a>' +
-                            '</div>';
-
-            }else{
-                img_divs +=	'<div class="grid-item item animate-box" data-animate-effect="fadeIn">' +
-                                '<a id="image_a" href="images/' + dir + "/" + file + extention + '" class="image-popup" title="' + descri + '">' +
-                                    '<div class="img-wrap"><img src="images/placeholder/landscape_w2.png" alt="" class="img-responsive" ></div>' +
-                                    '<div class="text-wrap"><div class="text-inner popup"><div><h2>' + descri + '</h2></div></div></div>' +
-                                '</a>' +
-                            '</div>';
-
- 
-            }    
+  
         }
     }
 
@@ -111,3 +88,5 @@ function canUseWebP() {
     // very old browser like IE 8, canvas not supported
     return false;
 }
+
+
