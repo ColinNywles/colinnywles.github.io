@@ -527,18 +527,18 @@ h1 {
 }
 
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 425px) {
   .grid-sizer,
   .grid-item {
     width: 100%;
   }
   #fh5co-image-grid {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 2px;
+    padding-right: 2px;
   }
 
   .grid-sizer, .grid-item{
-    padding: 20px;
+    padding: 10px;
   }
 }
 
@@ -552,7 +552,7 @@ h1 {
     padding-right: 5px;
   }
   .grid-sizer, .grid-item{
-    padding: 10px;
+    padding: 5px;
   }
 }
 
