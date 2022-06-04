@@ -42,7 +42,7 @@ function addImages(obj,data,n,webp) {
     for( i = 0; i < n; i++){
 
         //!!!!!! FOR CHECKING ONLY, COMMENT TO TURN OFF
-        descri = data[i].file
+        //descri = data[i].file
         //!!!!!! FOR CHECKING ONLY, COMMENT TO TURN OFF
 
         file = data[i].file.split(".")[0];

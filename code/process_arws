@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# move into directory
+parent_dir="/Volumes/PhotoSSD/WEBSITE_CNywles/import_images/"
+cd $parent_dir
+
+# remove arw files when done?
+echo " "
+echo "remove .ARW files when done? (y/n)"
+read rm_raws 
+
+# dirs
+dng_converter="/Applications/Adobe DNG Converter.app/Contents/MacOS/Adobe DNG Converter"
+xmp_preset="/Volumes/PhotoSSD/WEBSITE_CNywles/website_repo/assets/preset.xmp"
+dust_dir="/Volumes/PhotoSSD/WEBSITE_CNywles/img_assets/dust/"
+
+# process raw files
+n_raws=$(ls *.ARW | wc -l)  
+let counter=1
+for raw in $(ls *.ARW); do
+
+    # echo file
+    echo " "; 
+    echo $counter" / "$n_raws
+    echo "processing: "$raw  
+
+    # copy preset xmp file
+    cp $xmp_preset ${raw%%.*}".xmp" 
+
+    # convert ARW to dng
+    "$dng_converter" -c -p2 $raw
+
+    # convert to grayscale
+    convert -quiet ${raw%%.*}".dng" -colorspace Gray ${raw%%.*}".tif"
+
+    # width and height tif
+    img_w=$(identify -quiet -format "%w" ${raw%%.*}".tif") # width raw
+    img_h=$(identify -quiet -format "%h" ${raw%%.*}".tif") # height raw
+
+    # sample and convert dust
+    dust=$dust_dir"dust$((1 + $RANDOM % 18)).jpg"
+    echo "using: "$dust 
+    cp $dust dust_temp.jpg 
+    convert dust_temp.jpg -resize $img_w"x"$img_h\! dust_temp.jpg
+
+    # add dust
+    convert -quiet ${raw%%.*}".tif" \( dust_temp.jpg -normalize +level 0,40% \) -compose ColorDodge -composite -gravity center ${raw%%.*}".tif" # add dust overlay
+
+    # width and height raw
+    img_w=$(identify -quiet -format "%w" $raw) 
+    img_h=$(identify -quiet -format "%h" $raw)
+
+    # rotate if img is portrait
+    if [[ $img_w < $img_h ]];then 
+        convert -quiet ${raw%%.*}".tif" -rotate 270 ${raw%%.*}".tif" 
+    fi 
+
+    # clean up
+    rm -rf ${raw%%.*}".dng" ${raw%%.*}".xmp" dust_temp.jpg
+
+    # update counter
+    let counter=$counter+1
+    
+done
+
+# remove raw files
+rm_raws_bool="y"
+if [[ $rm_raws = $rm_raws_bool ]];then rm -rf *.ARW; fi
+rm_raws_bool="Y"
+if [[ $rm_raws = $rm_raws_bool ]];then rm -rf *.ARW; fi

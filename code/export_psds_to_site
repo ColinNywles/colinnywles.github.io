@@ -1,0 +1,156 @@
+#!/bin/zsh
+
+# set dir here
+parent_path="/Volumes/PhotoSSD/WEBSITE_CNywles/"
+
+# get current date
+current_date=$(date +%Y_%m_%d_%H_%M)
+
+# create sub paths
+import_dir=$parent_path"import_images/"
+export_dir=$parent_path"finished_images/exports_"$current_date
+assets_path=$parent_path"website_repo/assets/"
+jpg_path=$export_dir"/jpg/"
+psd_path=$export_dir"/psd/"
+img_website_path=$parent_path"website_repo/images/"
+
+# create dirs 
+mkdir $export_dir
+mkdir $jpg_path
+mkdir $psd_path
+
+# renaming files
+cd $import_dir
+c=1
+for i in $(ls *.psd); do
+    int=$RANDOM
+    printf -v c_name "%04d" $c
+    echo $i $c_name
+    mv $i "img_"$c_name"_"$(date +%Y%m%d)"_"$int".psd"
+    let c=c+1
+    sleep 0.1
+done
+sleep 1
+
+# move psd to export dir
+cd $import_dir
+mv *.psd $psd_path
+
+# add path to applescript
+cd $psd_path
+sed 's|insert_path_here|set targetFolderString to "'"$psd_path"'"|g' $assets_path"ExportPSDJPGs.SCPT" > $assets_path"ExportPSDJPGs_compiled.SCPT"
+
+# execute applescript, this applies the auto camera raw settings to the xmp files
+osascript $assets_path"ExportPSDJPGs_compiled.SCPT"
+sleep 1;
+
+
+# watch folder img_import_path to make sure all jpgs are ready
+cd $psd_path
+echo " "
+for (( t=1; t<=100; t++ )); do  
+    
+    echo $t
+    
+    # get number of files ready
+    n_jpgs=$(ls *.jpg | wc -l)
+    n_psds=$(ls *.psd | wc -l)
+
+    if [[ $n_jpgs == $n_psds ]];then
+        echo "jpgs done exporting, moving files"
+        sleep 3
+        mv *.jpg $jpg_path
+        break
+    else
+        echo "processing..."
+        sleep 1
+    fi
+    
+done
+
+# copy images to website repo
+cd $jpg_path
+cp *.jpg $img_website_path
+
+# export web verions 
+cd $img_website_path
+echo " "
+echo "converting the following images for web:"
+ls *.jpg
+
+n=$(ls *.jpg | wc -l); c=1
+for i in $(ls *.jpg); do
+
+    # echo process
+    echo $c "/" $n ":" $i
+
+    # get img dims
+    w=$(identify -format "%w" $i)
+    h=$(identify -format "%h" $i)
+
+    cp $i small/
+    cp $i medium/
+    cp $i large/
+
+    if [[ $w > $h ]];then
+        mogrify -resize 400 small/"$i"
+        mogrify -resize 1000 medium/"$i"
+        mogrify -resize 2200 large/"$i"
+        convert small/"$i" small_webp/"${i%%.*}".webp
+        convert medium/"$i" medium_webp/"${i%%.*}".webp
+        convert large/"$i" large_webp/"${i%%.*}".webp
+    else
+        mogrify -resize 400 small/"$i"
+        mogrify -resize 600 medium/"$i"
+        mogrify -resize 1600 large/"$i"
+        convert small/"$i" small_webp/"${i%%.*}".webp
+        convert medium/"$i" medium_webp/"${i%%.*}".webp
+        convert large/"$i" large_webp/"${i%%.*}".webp
+    fi
+
+    let c=c+1 
+
+done
+
+# add image data to website
+cd $img_website_path
+echo " "
+echo "creating image data for:"
+ls *.jpg
+
+echo "---------------------------------------------"
+
+# Example:
+# {'file' : 'file.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
+# {'file' : 'file.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
+
+touch new_data.js
+
+for i in $(ls *.jpg); do
+
+    w=$(identify -format "%w" $i)
+    h=$(identify -format "%h" $i)
+
+    # echo filename
+    filename="${i%.*}"
+    echo "$filename"
+
+    if [[ $w > $h ]];then
+        echo "              {'file' : '$i', 'name' : 'Untitled', 'format' : 'landscape'}," >> new_data.js
+    else
+        echo "              {'file' : '$i', 'name' : 'Untitled', 'format' : 'portrait'}," >> new_data.js
+    fi
+
+done
+
+# insert data into image-data.js
+lineNum="$(grep -n "new data gets automatically inserted above" ../index.html | head -n 1 | cut -d: -f1)"
+let lineNum-=3
+sed -i.bak "${lineNum}r new_data.js" ../index.html
+
+# remove temp data file 
+cd $img_website_path
+rm -rf new_data.js
+
+# copy originals to correct folder
+mv *.jpg original/

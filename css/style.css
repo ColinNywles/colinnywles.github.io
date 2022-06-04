@@ -59,10 +59,11 @@
 
 #image_a{
   opacity: 0;
+  
 }
 
 .image-popup{
-  transition:opacity 1s
+  transition:opacity 2s;
 }
 
 

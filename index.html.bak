@@ -84,7 +84,7 @@
 			 
 			  // These will be randomized
               {'file' : 'img_0003_20220504_18047.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
-			  {'file' : 'img_0001_20220504_27186.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
+			  //{'file' : 'img_0001_20220504_27186.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
 			  //{'file' : 'img_0002_20220504_12063.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
               //{'file' : 'img_0004_20220504_18959.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0005_20220504_19935.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
@@ -102,7 +102,7 @@
               {'file' : 'img_0005_20220518_8122.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0006_20220518_3288.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0001_20220601_32103.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
-              {'file' : 'img_0001_20220601_13493.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
+              //{'file' : 'img_0001_20220601_13493.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0002_20220601_2711.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0003_20220601_29526.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0004_20220601_13096.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
@@ -110,7 +110,7 @@
               {'file' : 'img_0006_20220601_4722.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0007_20220601_4082.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0008_20220601_4025.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
-              {'file' : 'img_0009_20220601_18756.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
+              //{'file' : 'img_0009_20220601_18756.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
               {'file' : 'img_0010_20220601_16572.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0011_20220601_6529.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0001_20220601_22207.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
@@ -124,6 +124,7 @@
               {'file' : 'img_0009_20220601_7738.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0010_20220601_4142.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0011_20220601_29408.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
+              //{'file' : 'img_0001_20220601_21568.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
 			  
 		
 			  // new data gets automatically inserted above
@@ -167,13 +168,13 @@
 
 
 
-		var initial_load_n_imgs = 12;
+		var initial_load_n_imgs = 12; // has to be dividable by 3
 
 		function sleep(ms) {
 			return new Promise(resolve => setTimeout(resolve, ms));
 		}
 
-		async function LoadIMGs(img_data,img_start,img_stop,img_ext,img_folder,sec) {
+		async function LoadIMGsWithDelay(img_data,img_start,img_stop,img_ext,img_folder,sec) {
 			await sleep(sec*1000);
 			console.log("loading images... index start: " + img_start + ', index stop: ' + img_stop);
 			var filename = "";
@@ -202,10 +203,14 @@
 
 		if(canUseWebP()){ // browser supporta webp
 			//$("#landingHeader").css("background-image", "url('images/covers/cover1_overlay.webp')")
-			LoadIMGsNow(data,0,initial_load_n_imgs,".webp","images/small_webp/");
+			LoadIMGsNow(data,0,initial_load_n_imgs/3,".webp","images/small_webp/");
+			LoadIMGsWithDelay(data,initial_load_n_imgs/3,(initial_load_n_imgs/3)*2,".webp","images/small_webp/",0.4);
+			LoadIMGsWithDelay(data,(initial_load_n_imgs/3)*2,initial_load_n_imgs,".webp","images/small_webp/",0.8);
 		}else{
 			//$("#landingHeader").css("background-image", "url('images/covers/cover1_overlay.jpg')")
 			LoadIMGsNow(data,0,initial_load_n_imgs,".jpg","images/small/");
+			LoadIMGsWithDelay(data,initial_load_n_imgs/3,(initial_load_n_imgs/3)*2,".jpg","images/small/",0.4);
+			LoadIMGsWithDelay(data,(initial_load_n_imgs/3)*2,initial_load_n_imgs,".jpg","images/small/",0.8);
 		}
 		
 
@@ -234,11 +239,11 @@
 
 				// load thumbnails in batches
 				var b = 0;
-				LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,0); b++
-				LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,1); b++		
-				LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,2); b++					
-				// LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,5); b++
-				// LoadIMGs(data,stops[b],stops[b+1],file_ext,folder,6); b++
+				LoadIMGsWithDelay(data,stops[b],stops[b+1],file_ext,folder,0); b++
+				LoadIMGsWithDelay(data,stops[b],stops[b+1],file_ext,folder,1); b++		
+				LoadIMGsWithDelay(data,stops[b],stops[b+1],file_ext,folder,2); b++					
+				// LoadIMGsWithDelay(data,stops[b],stops[b+1],file_ext,folder,5); b++
+				// LoadIMGsWithDelay(data,stops[b],stops[b+1],file_ext,folder,6); b++
 
 			}
 		});
