@@ -51,7 +51,7 @@
 	<script src="js/functions.js"></script>
 
 	</head>
-	<body>
+	<body onload="LoadIMGSBackup()">
 
 	<div id="mainTitleDiv">
 		<h1 class="to-animate fadeInDown animated-slow" style="-webkit-font-smoothing: auto;-webkit-text-stroke: 2.5px black;" id="mainTitle">C</h1>
@@ -125,6 +125,9 @@
               {'file' : 'img_0010_20220601_4142.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0011_20220601_29408.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               //{'file' : 'img_0001_20220601_21568.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
+              {'file' : 'img_0001_20220604_534.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
+              {'file' : 'img_0002_20220604_2006.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
+              {'file' : 'img_0001_20220605_19024.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
 			  
 		
 			  // new data gets automatically inserted above
@@ -200,6 +203,17 @@
 
 		}
 
+		function LoadIMGSBackup() {
+			if($(window).scrollTop()>1000) {
+				console.log("loading images... index start: " + 0 + ', index stop: ' + data.length);
+				var filename = "";
+				for( i = 0; i < data.length; i++){
+					filename = data[i].file.replace(/\.[^/.]+$/, "")
+					$(".img-responsive").eq(i).attr("src", "images/small_webp/" + filename + ".webp")
+				}
+			}
+		}
+
 
 		if(canUseWebP()){ // browser supporta webp
 			//$("#landingHeader").css("background-image", "url('images/covers/cover1_overlay.webp')")
@@ -212,7 +226,6 @@
 			LoadIMGsWithDelay(data,initial_load_n_imgs/3,(initial_load_n_imgs/3)*2,".jpg","images/small/",0.4);
 			LoadIMGsWithDelay(data,(initial_load_n_imgs/3)*2,initial_load_n_imgs,".jpg","images/small/",0.8);
 		}
-		
 
 
 		$(window).on('scroll resize', function() { }).one('scroll resize', function() {

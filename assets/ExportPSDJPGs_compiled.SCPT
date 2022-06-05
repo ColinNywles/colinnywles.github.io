@@ -1,4 +1,4 @@
-set targetFolderString to "/Volumes/PhotoSSD/WEBSITE_CNywles/finished_images/exports_2022_06_04_21_58/psd/"
+set targetFolderString to "/Volumes/PhotoSSD/WEBSITE_CNywles/finished_images/exports_2022_06_05_18_18/psd/"
 --set targetFolderString to "/Volumes/PhotoSSD/WEBSITE_Untitled_washi/finished_images/exports_2022_04_30_21_13/psd"
 
 
