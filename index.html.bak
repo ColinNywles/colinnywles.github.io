@@ -127,7 +127,10 @@
               //{'file' : 'img_0001_20220601_21568.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0001_20220604_534.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
               {'file' : 'img_0002_20220604_2006.jpg', 'name' : 'Untitled', 'format' : 'landscape'},
-              {'file' : 'img_0001_20220605_19024.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
+              //{'file' : 'img_0001_20220605_19024.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
+              {'file' : 'img_0001_20220605_17059.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
+              //{'file' : 'img_0001_20220610_4821.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
+              {'file' : 'img_0001_20220610_29419.jpg', 'name' : 'Untitled', 'format' : 'portrait'},
 			  
 		
 			  // new data gets automatically inserted above
