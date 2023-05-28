@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+
+<html style="scroll-behavior: smooth;">
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Colin Nywles - Film Photography</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="35mm film bw photography" />
+	<meta name="keywords" content="35mm, film, photography, washi, BW, analog, Leica M4, Nikon F3, Nikon EM, Contrast" />
+	<meta name="author" content="Colin Nywles" />
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Set favicon -->
+	<link rel="shortcut icon" href="assets/favicon.svg">
+
+	<!-- Pre-load logo fonts -->
+	<!-- <link rel="preload" href="assets/Getlost.otf" as="font" type="font/otf"> -->
+	<link rel="preload" href="js/main.js" as="script">
+	
+	<!-- Image counter font -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text&family=Space+Mono&display=swap" rel="stylesheet">
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate2.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/bootstrap2.css">
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="css/style.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="css/magnific-popup.css">
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	<!-- JS additional functions -->
+	<script src="js/functions.js"></script>
+
+	<!-- JS image album data -->
+	<script src="bw_website.js"></script>
+
+	</head>
+	<body onload="LoadIMGSBackup()" style="cursor: none;overflow-y: hidden;">
+
+	<div class="cursor">
+		<div class="cursor__ball cursor__ball--big ">
+			<svg height="30" width="30">
+			<circle cx="15" cy="15" r="12" stroke-width="0"></circle>
+			</svg>
+		</div>
+	</div>
+		  
+	<div id="mainTitleDiv">
+		<img id="logo_svg" src="assets/logo_antiAlias.svg" />
+		<!-- <h1 class="to-animate fadeInDown animated-slow" id="mainTitle">C</h1>
+		<h1 class="to-animate fadeInDown animated-slow" id="mainTitle">olin</h1>
+		<h1 class="to-animate fadeInDown animated-slow" id="mainTitle">N</h1>
+		<h1 class="to-animate fadeInDown animated-slow" id="mainTitle">ywles</h1>
+		<h1 class="to-animate fadeInDown animated-slow" id="mainTitle">,</h1> -->
+	</div>
+
+	<div class="container-fluid" style="z-index: 0;" id="fh5co-image-grid"><div class="grid"><div class="grid-sizer" id="add-images-here"></div></div></div>
+
+	<script type="text/javascript">
+
+		shuffleArray(data); // shuffle data 
+		addImages(document.getElementById("add-images-here"),data,data.length); // add remaining images
+
+	</script>
+
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Magnific -->
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/magnific-popup-options.js"></script>
+	<!-- Isotope & imagesLoaded -->
+	<script src="js/isotope.pkgd.min.js"></script>
+	<script src="js/imagesloaded.pkgd.min.js"></script>
+	<!-- GSAP  -->
+	<script src="js/TweenLite.min.js"></script>
+	<script src="js/CSSPlugin.min.js"></script>
+	<script src="js/EasePack.min.js"></script>
+	<!-- MAIN JS -->
+	<script src="js/main.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+
+	<!-- SCROLL DOWN -->
+	<script type="text/javascript">
+
+		if(window.matchMedia("(pointer: coarse)").matches) {
+			$(".cursor").css("display","none")
+		}
+
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
+		async function LoadIMGsWithDelay(img_data,img_start,img_stop,sec) {
+			await sleep(sec*1000);
+			console.log("loading images... index start: " + img_start + ', index stop: ' + img_stop);
+			
+			// load thumbnails
+			for( i = img_start; i < img_stop; i++){
+				$(".img-responsive").eq(i).attr("src", img_data[i].url_small[0])
+				$(".img-responsive")[i].className = "img-responsive fadein"
+			}
+		}
+
+		function LoadIMGsNow(data,img_start,img_stop) {
+			console.log("loading images now!!! index start: " + img_start + ', index stop: ' + img_stop);
+			
+			// load thumbnails
+			for( i = img_start; i < img_stop; i++){
+				$(".img-responsive").eq(i).attr("src", data[i].url_small[0]);
+				data[i].img_loaded = true;
+			}
+
+		}
+
+		function LoadIMGSBackup() {
+			if($(window).scrollTop()>500){
+				console.log("running ShowIMGSBackup")
+				var image_elements = document.getElementsByClassName("image-popup");
+				for(var i = 0; i < image_elements.length; i++) {
+					elsrc = $(".img-responsive").eq(i).attr("src");
+					if(elsrc.includes("placeholder")){
+						console.log("no src set");
+						$(".img-responsive").eq(i).attr("src", data[i].url_small[0]);
+						$(".img-responsive")[i].className = "img-responsive fadein"
+					}
+				}
+			}
+
+		}
+
+		function waitForImg(nth_elem, timeout=0){
+			const startTime = new Date().getTime();
+			return new Promise((resolve, reject)=>{
+				const timer = setInterval(()=>{
+					const now = new Date().getTime();
+					if(document.querySelectorAll(".img-responsive")[nth_elem]){
+						clearInterval(timer);
+						resolve();
+					}else if(timeout && now - startTime >= timeout){
+						clearInterval(timer);
+						reject();
+					}
+				}, 100);
+			});
+		}
+
+		// preload first load image thumbnails
+		n_preload = 20;
+		if(window.innerWidth<426) n_preload = 3;
+		LoadIMGsNow(data,0,n_preload);
+		waitForImg(n_preload-1,3000).then(function(){
+			console.log("img n_preload loaded, fading in images", n_preload);
+			for( i = 0; i < n_preload; i++) $(".img-responsive")[i].className = "img-responsive fadein"
+		})
+
+		$(window).on('scroll resize', function() { }).one('scroll resize', function() {
+	
+			if (Math.abs(100 - $(this).scrollTop()) < 1000) {
+		
+				// loading batch settings
+				var initial_load_n_imgs = 0;
+				for( i = 1; i < data.length; i++) {
+					if(data[i].img_loaded) initial_load_n_imgs++;
+				}
+				var n_load_batches = 3;		
+				var n_imgs_per_batch = Math.round( (data.length-initial_load_n_imgs) / n_load_batches);
+				let stops = [initial_load_n_imgs]; // image to start at
+				for( i = 1; i < (n_load_batches+1); i++) stops.push(initial_load_n_imgs + n_imgs_per_batch*i)
+				stops[stops.length-1] = data.length
+				
+				// load thumbnails in batches
+				var b = 0;
+				LoadIMGsWithDelay(data,stops[b],stops[b+1],0); b++
+				LoadIMGsWithDelay(data,stops[b],stops[b+1],1); b++		
+				LoadIMGsWithDelay(data,stops[b],stops[b+1],2); b++					
+				// LoadIMGsWithDelay(data,stops[b],stops[b+1],file_ext,folder,5); b++
+				// LoadIMGsWithDelay(data,stops[b],stops[b+1],file_ext,folder,6); b++
+
+			}
+		});
+
+		const $bigBall = document.querySelector('.cursor__ball--big');
+		const $hoverables = document.querySelectorAll('.hoverable');
+
+		// Listeners
+		document.body.addEventListener('mousemove', onMouseMove);
+		for (let i = 0; i < $hoverables.length; i++) {
+			$hoverables[i].addEventListener('mouseenter', onMouseHover);
+			$hoverables[i].addEventListener('mouseleave', onMouseHoverOut);
+		}
+
+		// Move the cursor
+		function onMouseMove(e) {
+			TweenMax.to($bigBall, 0.05, {
+				x: e.pageX - 15,
+				y: e.pageY - 15 - window.scrollY
+			})
+		}
+
+		// Hover an element
+		function onMouseHover() {
+			TweenMax.to($bigBall, .3, {
+				scale: 3,
+				transformOrigin: "15px 16px"
+			})
+		}
+		function onMouseHoverOut() {
+			TweenMax.to($bigBall, .3, {
+				scale: 1
+			})
+		}
+
+
+	</script>
+
+
+</body>
+</html>
+
