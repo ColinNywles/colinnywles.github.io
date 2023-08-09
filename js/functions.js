@@ -69,3 +69,37 @@ function addImages(obj,data,n) {
     // add newly created html to object
     obj.innerHTML = img_divs
 }
+
+function imageTopInView(window_bottom) {
+    
+    var top = 0;
+    var bottom = 0;
+    for( i = 0; i < items.length; i++){
+        top = items[i].getBoundingClientRect().top;
+        bottom = top + items[i].getBoundingClientRect().height;
+        if(top > 0 & bottom > 0 & top<window_bottom) {
+            if(items_images[i].className == "img-responsive") {
+                items_images[i].src =  data[i].url_small[0];
+                items_images[i].className = "img-responsive fadein"
+            }
+        }
+    }
+} 
+
+function doSomething(scrollPos) {
+    console.log(scrollPos)
+}
+
+let window_bottom = 0;
+let items = document.getElementsByClassName("grid-item");
+let items_images = document.getElementsByClassName("img-responsive");
+
+document.addEventListener("scroll", (event) => {
+    window_bottom = window.innerHeight;
+  
+    window.requestAnimationFrame(() => {
+        imageTopInView(window_bottom);
+    });
+  
+    
+});
