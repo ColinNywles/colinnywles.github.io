@@ -96,12 +96,21 @@
 .fadein {
   animation-name: fadein; 
   animation-fill-mode: both; 
-  animation-duration: 250ms; 
+  animation-duration: 300ms;  /*250ms*/ 
   animation-timing-function: ease-in;
-  animation-delay: 100ms;
+  animation-delay: 300ms; /*100ms*/
+}
+
+.fadeinSlower {
+  animation-name: fadein; 
+  animation-fill-mode: both; 
+  animation-duration: 600ms;  /*250ms*/ 
+  animation-timing-function: ease-in;
+  animation-delay: 400ms; /*100ms*/
 }
 
 @keyframes fadein {
+  0% {opacity: 0;transform: translateY(100%);}
   20% {opacity: 0;transform: translateY(10%);}
   100% {opacity: 1;transform: translateY(0);}
 }
